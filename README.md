@@ -208,7 +208,7 @@ pip install boto3
 
 1. **Clone & Install** 📥:
    ```bash
-   git clone https://github.com/yourusername/F0undry.git
+   git clone https://github.com/ksbicorp/F0undry.git
    cd F0undry
    pip install -r requirements.txt
    playwright install chromium
@@ -315,3 +315,4 @@ This project stands on the shoulders of giants. Huge thanks to these amazing dev
 ---
 
 **⭐ Star this repo if you find it useful!** | **🐛 Report issues** | **💡 Submit PRs** | **📢 Share with the community!**
+
