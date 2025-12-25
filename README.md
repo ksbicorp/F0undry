@@ -2,7 +2,7 @@
 
 **F0undry** is a world-standard, fully automated secret discovery and validation engine. It combines advanced Telegram scraping, stealth headless browsing, and multi-layer de-obfuscation to identify exposed credentials across the web.
 
-![F0undry Screenshot](Ekran%20görüntüsü%202025-12-26%20000242.png)
+![F0undry Screenshot](f0undry-screenshot.png)
 
 ## 🚀 Features
 
@@ -291,7 +291,7 @@ ls F0undry/chrome-win/chrome.exe
 ### "Import Error" 📦
 Install missing dependencies:
 ```bash
-pip install -r ../requirements.txt
+pip install -r requirements.txt
 ```
 
 ### "Playwright not available" 🎭
@@ -304,11 +304,11 @@ playwright install
 
 This project stands on the shoulders of giants. Huge thanks to these amazing developers:
 
-- **SecretFinder** 🔍: [m4ll0k](https://github.com/m4ll0k/SecretFinder) - JavaScript secret extraction expert
-- **KeyHacks** ✅: [streaak](https://github.com/streaak/KeyHacks) - API validation methodology pioneer
-- **HEDnsExtractor** 🌐: [HuntDownProject](https://github.com/HuntDownProject/HEDnsExtractor) - DNS reconnaissance specialist
-- **t-hoog-ex** 🦡: [TruffleSecurity](https://github.com/trufflesecurity) - Browser-based secret detection
-- **Evilginx2** 🎣: [kgretzky](https://github.com/kgretzky/evilginx2) - Advanced proxy framework
+- **SecretFinder** 🔍: [m4ll0k/SecretFinder](https://github.com/m4ll0k/SecretFinder) - JavaScript secret extraction expert
+- **KeyHacks** ✅: [streaak/KeyHacks](https://github.com/streaak/KeyHacks) - API validation methodology pioneer
+- **HEDnsExtractor** 🌐: [HuntDownProject/HEDnsExtractor](https://github.com/HuntDownProject/HEDnsExtractor) - DNS reconnaissance specialist
+- **t-hoog-ex** 🦡: [trufflesecurity/trufflehog](https://github.com/trufflesecurity/trufflehog) - Browser-based secret detection
+- **Evilginx2** 🎣: [kgretzky/evilginx2](https://github.com/kgretzky/evilginx2) - Advanced proxy framework
 
 ## 🔥 F0undry - Forged in Code, Tested by Fire 🔥
 
