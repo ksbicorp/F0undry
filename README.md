@@ -1,318 +1,157 @@
-# 🔥 F0undry - Enterprise-Grade API Key & Secret Scanner 🔐
+# F0undry
 
-**F0undry** is a world-standard, fully automated secret discovery and validation engine. It combines advanced Telegram scraping, stealth headless browsing, and multi-layer de-obfuscation to identify exposed credentials across the web.
+F0undry is a defensive security reconnaissance tool designed to detect freshly created domains and short links that are rapidly spreading through Telegram channels and communities. The core idea is simple: when a domain is launched quickly and exposed publicly, it often goes live with misconfigurations, redirect chains, leaked credentials, or hidden secrets before it is properly reviewed. F0undry helps identify those risks early.
+
+It connects to Telegram through the Telethon API, scans historical messages from a target channel or chat, extracts links and URL payloads, resolves them through a browser-based flow, and follows redirect chains to uncover the real destination domain. Once the final domain is identified, the tool runs secret discovery checks against it using browser automation and tools such as TruffleHog and other secret-finding workflows.
+
+The result is a structured list of findings shown in a GUI, making it easier to spot exposed API keys, tokens, or other sensitive material that may have been left behind on newly launched domains.
 
 ![F0undry Screenshot](f0undry-screenshot.png)
 
-## 🚀 Features
+## What F0undry does
 
-### 🛡️ World-Standard Recon Engine
-- **99+ Security Patterns** 🎯: Comprehensive detection for AWS, GCP, Azure, Stripe, GitHub, Slack, Private Keys (RSA, PGP), and more.
-- **Advanced De-obfuscation** 🔓: Handles HTML entities, Base64 encoding, Punycode, and zero-width space obfuscation.
-- **Protocol Filtering** 🌐: Intelligent URL canonicalization that filters out noise and focuses on high-value HTTPS targets.
+F0undry is built to solve a very specific problem:
 
-### ⚡ High-Performance Scanning
-- **Turbo Hunter Mode** 🚄: Powered by Playwright with 15+ concurrent browser instances for batch processing 300K+ URLs.
-- **Stealth Engine** 🥷: Integrated `Franken-V2 Ultimate` with advanced fingerprinting protection and human-like behavior.
-- **Telegram Integration** 💬: High-fidelity extraction from messages, entities, buttons, and media.
+- Telegram channels frequently share fresh domains and shortened links.
+- Many of these domains are created quickly and may not be properly monitored.
+- If a redirect or landing page exposes sensitive information, it can be missed until much later.
+- F0undry helps catch these issues earlier by automating the discovery and verification process.
 
-### 🔧 Integrated Tool Suite
-- **SecretFinder** 🔍: Deep JS file analysis for hidden secrets.
-- **HEDnsExtractor** 🌐: DNS reconnaissance and enumeration.
-- **KeyHacks Validator** ✅: Real-time validation of discovered keys to eliminate false positives.
+In practice, the tool does the following:
 
----
+1. Connects to Telegram using the Telethon API.
+2. Fetches historical messages from a configured channel or chat.
+3. Extracts URLs, shortened links, and redirect chains.
+4. Opens them in a browser using Playwright or Selenium.
+5. Resolves final domains and landing pages.
+6. Scans the exposed pages and related JS assets for secrets.
+7. Runs tools such as TruffleHog and secret finder checks.
+8. Lists the discovered results in a GUI for triage.
 
-## 🛠️ Integrated Tools Arsenal
+## Why it matters
 
-F0undry integrates industry-leading open-source tools to create a comprehensive security testing platform. Each tool has been carefully selected for its proven effectiveness in the security community:
+The project targets a critical gap in early-warning security monitoring: newly created domains appear fast, spread fast, and may be abused or misconfigured before they are reviewed. F0undry gives defenders a way to automatically detect and investigate these domains before they become a bigger security problem.
 
-### 🔍 **SecretFinder** by [m4ll0k](https://github.com/m4ll0k)
+This is particularly useful for:
 
-**Why it's World-Class:**
-SecretFinder is a powerful Python-based tool that specializes in discovering sensitive data hidden within JavaScript files. Built upon LinkFinder's foundation, it employs sophisticated regex patterns and jsbeautifier to uncover:
+- Security researchers
+- Bug bounty workflows
+- Threat intelligence teams
+- Defensive monitoring of public Telegram communities
+- Early detection of exposed credentials and infrastructure risks
 
-- 🔑 **API Keys & Access Tokens**: Identifies exposed credentials in minified or obfuscated JS
-- 🎫 **JWT Tokens**: Extracts JSON Web Tokens from client-side code
-- 🔐 **Authorization Headers**: Discovers hardcoded authentication mechanisms
-- 📝 **Sensitive Endpoints**: Maps internal API routes and paths
+## Features
 
-**Key Features:**
-- HTML and plaintext output formats
-- Support for authenticated scanning with cookies
-- Burp Suite integration for seamless workflow
-- Recursive link extraction and processing
-- Custom regex filtering for targeted searches
-- Proxy support for enterprise environments
+### Telegram-based reconnaissance
+- Pulls historical messages and links from target Telegram chats or channels
+- Extracts URLs, redirect payloads, and shared short links
+- Filters and normalizes suspicious target domains
 
-**F0undry Integration:** Automatically scans all discovered JavaScript files for secrets, feeding results directly into the validation pipeline.
+### Browser-based resolution
+- Opens links in a headless browser using Playwright / Selenium
+- Resolves short URLs and redirect chains to real domains
+- Captures final destination pages and associated content
 
----
+### Secret detection
+- Scans domains and linked assets for leaked credentials
+- Uses secret discovery patterns and automated validation techniques
+- Integrates with tools such as TruffleHog and other secret finder workflows
 
-### ✅ **KeyHacks** by [streaak](https://github.com/streaak)
+### GUI output
+- Displays results in a user-friendly interface
+- Helps analysts quickly prioritize suspicious findings
+- Makes repetitive monitoring more manageable
 
-**Why it's Essential:**
-KeyHacks provides validation methods for 70+ different API key types, eliminating false positives and confirming real security issues. This is critical because discovering a key is only half the battle—you need to verify it's actually valid.
+## Project structure
 
-**Supported Services Include:**
-- ☁️ **Cloud Providers**: AWS, Azure, GCP credentials validation
-- 💳 **Payment APIs**: Stripe, PayPal, Square key testing
-- 📱 **Social Media**: Facebook, Twitter, Instagram token verification
-- 🔧 **Developer Tools**: GitHub, GitLab, Slack API validation
-- 📧 **Email Services**: SendGrid, Mailgun, Twilio authentication
-- 📊 **Analytics**: Google Analytics, Amplitude, DataDog keys
-- 🗄️ **Databases**: MongoDB, Firebase, Redis credentials
-
-**Key Features:**
-- Real HTTP requests to validate key permissions
-- Distinguishes between read-only and write-capable keys
-- Identifies expired or revoked credentials
-- Safe, non-destructive testing methods
-- Automated validation scripts ready to use
-
-**F0undry Integration:** Every discovered key is automatically validated through KeyHacks methods, ensuring you only receive confirmed, actionable results.
-
----
-
-### 🌐 **HEDnsExtractor** by [HuntDownProject](https://github.com/HuntDownProject)
-
-**Why it's Powerful:**
-HEDnsExtractor is a specialized DNS reconnaissance tool written in Go that extracts domain information from Hurricane Electric's portal. It excels at:
-
-- 🔎 **Domain Discovery**: Uncovers related domains and subdomains
-- 🌍 **Network Mapping**: Extracts IP ranges and network blocks
-- 🦠 **Phishing Detection**: Identifies suspicious lookalike domains
-- 📋 **VirusTotal Integration**: Enriches data with threat intelligence
-- 🎯 **IPv6 Support**: Full support for modern IP addressing
-
-**Key Features:**
-- YAML-based workflow configuration
-- Multi-domain batch processing
-- Regex pattern matching for targeted extraction
-- Network-to-domain reverse mapping
-- Automated threat hunting capabilities
-- Clean, structured output for further processing
-
-**F0undry Integration:** Provides comprehensive DNS reconnaissance for target domains, expanding the attack surface by discovering additional assets and infrastructure.
-
----
-
-### 🦡 **t-hoog-ex (TruffleHog Extension)** by [TruffleSecurity](https://github.com/trufflesecurity)
-
-**Why it's Innovative:**
-This browser extension brings real-time secret detection directly to your browser, allowing you to identify exposed credentials as you browse:
-
-- 🔴 **Live Detection**: Real-time scanning of web pages for secrets
-- 🎨 **Visual Indicators**: Highlights sensitive data directly in the browser
-- 📦 **Pattern Library**: Extensive database of secret patterns
-- 🚨 **Instant Alerts**: Immediate notification of discovered credentials
-
-**Key Features:**
-- Browser extension for Firefox and Chrome
-- AWS key detection and validation helpers
-- Slack webhook identification
-- Algolia API key testing
-- Amplitude analytics validation
-- Non-intrusive, privacy-focused scanning
-
-**F0undry Integration:** Leverages TruffleHog's proven detection patterns and methodologies, adapted for automated scanning workflows.
-
----
-
-### 🎣 **Evilginx2** by [kgretzky](https://github.com/kgretzky/evilginx2)
-
-**Why it's Strategic:**
-Evilginx2 is a man-in-the-middle attack framework that enables sophisticated phishing campaigns. While F0undry is a defensive tool, integrating with Evilginx2's proxy capabilities provides:
-
-- 🔄 **IP Rotation**: Route traffic through proxy infrastructure
-- 🛡️ **Anti-Bot Bypass**: Evade detection and rate limiting
-- 🌐 **Traffic Obfuscation**: Hide scanning activities
-- 🔒 **HTTPS Interception**: Deep packet inspection capabilities
-
-**Key Features:**
-- Reverse proxy with SSL/TLS support
-- Session hijacking protection for testing
-- Custom phishlet creation
-- Real-time traffic manipulation
-- Advanced evasion techniques
-
-**F0undry Integration:** Optional proxy routing through Evilginx2 infrastructure for enhanced stealth and to bypass aggressive rate limiting during large-scale scans.
-
----
-
-## 💎 Why F0undry is World-Standard
-
-F0undry isn't just another secret scanner—it represents the convergence of battle-tested tools and innovative techniques:
-
-### ✨ **Comprehensive Coverage**
-- **99+ Detection Patterns**: More than any competing tool
-- **70+ Validation Methods**: Real verification, not just pattern matching
-- **Multi-Source Discovery**: Telegram, web scraping, DNS, and JavaScript analysis
-- **15+ Concurrent Browsers**: Industrial-scale throughput
-
-### 🎯 **Superior Accuracy**
-- **Advanced De-obfuscation**: Handles Base64, HTML entities, Punycode, zero-width characters
-- **Real Validation**: Every key tested with actual API calls
-- **False Positive Elimination**: Multi-stage filtering and verification
-- **Context-Aware Extraction**: Understands code structure and patterns
-
-### 🚀 **Enterprise Performance**
-- **300K+ URLs per Session**: Proven scalability
-- **Async Architecture**: Non-blocking, concurrent operations
-- **Stealth Technology**: Franken-V2 Ultimate fingerprint protection
-- **Resource Optimization**: Intelligent browser instance pooling
-
-### 🔧 **Production Ready**
-- **GUI Interface**: User-friendly PyQt5 application
-- **Extensible Architecture**: Easy to add new patterns and validators
-- **Centralized Configuration**: Single source for all settings
-- **Professional Output**: Structured results in multiple formats
-
-This combination of breadth, accuracy, performance, and usability makes F0undry the go-to solution for professional security researchers and penetration testers worldwide. 🌍
-
-## 📁 Project Structure
-
-```
+```text
 F0undry/
-├── core/                          # Core engines
-│   ├── f0undry_gui.py            # Main GUI application
-│   └── frank_headless_v2_ultimate.py  # Stealth browser engine
-├── tools/                         # Integrated tools
-│   ├── SecretFinder-master/      # JS secret extraction
-│   ├── keyhacks-master/          # Validation methods
-│   ├── HEDnsExtractor-main/      # DNS enumeration
-│   ├── t-hoog-ex/                # Browser extension patterns
-│   └── keyhacks_validator.py     # Validation framework
-├── config/                        # Configuration
-│   └── config.py                 # Central config
-├── chrome-win/                    # Chromium browser
+├── core/
+│   ├── f0undry_gui.py
+│   └── frank_headless_v2_ultimate.py
+├── tools/
+│   ├── SecretFinder-master/
+│   ├── keyhacks-master/
+│   ├── HEDnsExtractor-main/
+│   ├── t-hoog-ex/
+│   └── keyhacks_validator.py
+├── config/
+│   └── config.py
+├── chrome-win/
 │   └── chrome.exe
-├── results/                       # Output directory
-└── run_f0undry.py                # Launcher script
+├── results/
+├── run_f0undry.py
+├── README.md
+└── requirements.txt
 ```
 
-## 🔧 Installation
+## Installation
 
-### Prerequisites 📋
+### Prerequisites
+
 ```bash
-# Python 3.8+
-pip install PyQt5 selenium undetected-chromedriver requests telethon playwright aiohttp pyyaml
-```
-
-### Optional (for AWS validation) ☁️
-```bash
-pip install boto3
-```
-
-## 🎮 Quick Start
-
-1. **Clone & Install** 📥:
-   ```bash
-   git clone https://github.com/ksbicorp/F0undry.git
-   cd F0undry
-   pip install -r requirements.txt
-   playwright install chromium
-   ```
-
-2. **Configure** ⚙️:
-   Edit `config/config.py` or set environment variables:
-   ```bash
-   export TELEGRAM_API_ID="your_id"
-   export TELEGRAM_API_HASH="your_hash"
-   ```
-
-3. **Run** 🚀:
-   ```bash
-   python run_f0undry.py
-   ```
-
-## 🔐 Validation Framework
-
-F0undry uses **KeyHacks validation methods** to verify discovered keys:
-
-- ✅ Slack Webhooks & Tokens 💬
-- ✅ GitHub Access Tokens 🐙
-- ✅ Google API Keys 🔍
-- ✅ Stripe API Keys 💳
-- ✅ AWS Access Keys ☁️
-- ✅ Facebook Access Tokens 👤
-- ✅ Twilio API Keys 📞
-- ✅ Mailgun API Keys 📧
-- ✅ Heroku API Keys 🚀
-- ...and 70+ more! 🎯
-
-## 📊 Output Files
-
-- `results/f0undry_results.txt` 📝 - All discovered secrets
-- `results/f0undry_valid_keys.txt` ✅ - Validated API keys only
-- `results/targets.txt` 🎯 - URL list for scanning
-
-## ⚙️ Advanced Features
-
-### Chromium Path 🌐
-Centralized Chromium configuration ensures all tools use the same browser:
-```python
-CHROMIUM_PATH = BASE_DIR / "chrome-win" / "chrome.exe"
-```
-
-### Pattern Detection 🎯
-- **99+ regex patterns** (World-Standard Vault) 🔐
-- **SecretFinder patterns** integrated 🔍
-- **Custom patterns** easily extensible 📝
-- **Advanced De-obfuscation** (Base64, HTML, Punycode) 🔓
-
-### Proxy Integration 🔄
-Route all requests through evilginx2 or custom proxy for:
-- IP rotation 🌍
-- Anti-bot bypass 🛡️
-- Rate limit circumvention ⚡
-
-## ⚠️ Legal Disclaimer
-
-**F0undry is for authorized security testing only.** ⚖️
-
-- ✅ Use on systems you own 🏠
-- ✅ Use with explicit written permission 📜
-- ✅ Use for educational purposes 📚
-- ❌ Do NOT scan unauthorized systems 🚫
-- ❌ Do NOT violate Terms of Service 📋
-- ❌ Do NOT use for malicious purposes 💀
-
-Users are solely responsible for compliance with applicable laws. Unauthorized scanning is illegal. 🚨
-
-## 🛠️ Troubleshooting
-
-### "Chromium not found" 🔍
-Ensure `chrome-win/chrome.exe` exists:
-```bash
-ls F0undry/chrome-win/chrome.exe
-```
-
-### "Import Error" 📦
-Install missing dependencies:
-```bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### "Playwright not available" 🎭
+### Optional browser setup
+
 ```bash
-pip install playwright
-playwright install
+playwright install chromium
 ```
 
-## 📚 Tool Credits
+## Configuration
 
-This project stands on the shoulders of giants. Huge thanks to these amazing developers:
+Before running the tool, configure Telegram access and any required environment variables:
 
-- **SecretFinder** 🔍: [m4ll0k/SecretFinder](https://github.com/m4ll0k/SecretFinder) - JavaScript secret extraction expert
-- **KeyHacks** ✅: [streaak/KeyHacks](https://github.com/streaak/KeyHacks) - API validation methodology pioneer
-- **HEDnsExtractor** 🌐: [HuntDownProject/HEDnsExtractor](https://github.com/HuntDownProject/HEDnsExtractor) - DNS reconnaissance specialist
-- **t-hoog-ex** 🦡: [trufflesecurity/trufflehog](https://github.com/trufflesecurity/trufflehog) - Browser-based secret detection
-- **Evilginx2** 🎣: [kgretzky/evilginx2](https://github.com/kgretzky/evilginx2) - Advanced proxy framework
+```bash
+export TELEGRAM_API_ID="your_api_id"
+export TELEGRAM_API_HASH="your_api_hash"
+```
 
-## 🔥 F0undry - Forged in Code, Tested by Fire 🔥
+You may also need to update configuration values inside `config/config.py` depending on your environment and target workflow.
 
----
+## Quick start
 
-**⭐ Star this repo if you find it useful!** | **🐛 Report issues** | **💡 Submit PRs** | **📢 Share with the community!**
+```bash
+git clone https://github.com/ksbicorp/F0undry.git
+cd F0undry
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+playwright install chromium
+python run_f0undry.py
+```
 
+## Legal and ethical use
+
+F0undry is intended for authorized security testing and defensive research only.
+
+- Use only on systems or domains you own or are explicitly authorized to test.
+- Do not scan or analyze unauthorized infrastructure.
+- Do not use it for malicious purposes or to violate the terms of service of any platform or product.
+- Comply with the laws and regulations in your jurisdiction.
+
+## Disclaimer
+
+This project is a research and monitoring tool focused on proactive security detection. It is not intended to facilitate unauthorized access, abuse, or malicious activity.
+
+## Credits and ecosystem
+
+This project draws inspiration from and integrates techniques and tools used across the security research ecosystem, including:
+
+- SecretFinder
+- TruffleHog
+- KeyHacks
+- HEDnsExtractor
+- Playwright
+- Telethon
+
+## Contributing
+
+Contributions are welcome. If you want to improve the scanner, add new detection logic, enhance browser resolution, or improve the GUI workflow, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is distributed under the repository's existing license terms. Please refer to the repository for the specific licensing details.
